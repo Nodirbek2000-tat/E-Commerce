@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(to right, #f9f6ff, #f0faff);
+    }
+    .product-title {
+        font-size: 2.5rem;
+        background: linear-gradient(to right, #ff512f, #dd2476);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+        animation: fadeInDown 1s ease-in-out;
+    }
+    .main-image {
+        max-height: 500px;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 15px;
+        transition: transform 0.3s ease;
+    }
+    .main-image:hover {
+        transform: scale(1.05);
+    }
+    .small-thumb {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border-radius: 8px;
+    }
+    .small-thumb:hover {
+        transform: scale(1.15);
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    .price-tag {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #ff512f;
+        animation: pulse 1.5s infinite;
+    }
+    .info-line {
+        font-size: 1.1rem;
+        font-weight: 500;
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .highlight {
+        background: #fff7e6;
+        padding: 3px 8px;
+        border-radius: 8px;
+        font-weight: bold;
+        color: #ff8c00;
+    }
+    .btn-animated {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+    .btn-animated::before {
+        content: "";
+        position: absolute;
+        left: -100%;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255,255,255,0.3);
+        transition: all 0.4s ease;
+    }
+    .btn-animated:hover::before {
+        left: 0;
+    }
+    .comment-card {
+        border-radius: 15px;
+        border: 1px solid #eee;
+        padding: 15px;
+        background: white;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    .comment-card strong {
+        font-size: 1.1rem;
+        color: #333;
+    }
+    .comment-stars {
+        color: gold;
+        font-size: 1.2rem;
+    }
+    .description-box {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        line-height: 1.6;
+    }
+    .related-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    .related-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+    @keyframes fadeInDown {
+        0% { opacity: 0; transform: translateY(-20px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+</style>
+
+<div class="container my-5">
+    <h2 class="product-title mb-3 text-center">{{ product.name }}</h2>
+
+    <!-- Rating -->
+    <div class="d-flex align-items-center justify-content-center mb-4">
+        <span class="text-warning fs-5 me-2">★★★★★</span>
+        <span class="badge bg-info text-dark">{{ latest_reviews|length }} Reviews</span>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left: Images -->
+        <div class="col-lg-6">
+            <div class="card p-3 shadow-lg border-0">
+                <div class="d-flex">
+                    <!-- Thumbnails -->
+                    <div class="me-3" style="max-height: 500px; overflow-y: auto;">
+                        {% for images in product.images.all %}
+                            <img src="{{ images.image.url }}" class="img-thumbnail mb-2 small-thumb" style="cursor:pointer;">
+                        {% endfor %}
+                    </div>
+                    <!-- Main Image -->
+                    <div class="flex-grow-1 text-center">
+                        <img id="mainImage" src="{{ product.image.url }}" class="main-image shadow" alt="{{ product.name }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Price & Info -->
+        <div class="col-lg-6">
+            <div class="card p-4 shadow-lg border-0 mb-4">
+                <h3 class="price-tag">${{ product.price }}</h3>
+                {% if product.old_price %}
+                <p class="text-muted">
+                    <del>${{ product.old_price }}</del>
+                    {% if product.discount %}
+                    <span class="badge bg-success">-{{ product.discount }}%</span>
+                    {% endif %}
+                </p>
+                {% endif %}
+
+                <hr>
+                <div class="info-line">
+                    <i class="bi bi-tags-fill text-primary"></i>
+                    <strong>Category:</strong> <span class="highlight ms-2">{{ product.category.name }}</span>
+                </div>
+                <div class="info-line">
+                    <i class="bi bi-box-seam text-warning"></i>
+                    <strong>Availability:</strong> <span class="highlight ms-2">{{ product.stock_count }} in stock</span>
+                </div>
+                <div class="info-line">
+                    <i class="bi bi-fire text-danger"></i>
+                    <strong>Sold:</strong> <span class="highlight ms-2">{{ product.order_count }} this week</span>
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <a href="{% url 'buy_now' product.slug %}" class="btn btn-warning btn-animated flex-fill fw-bold">Buy Now</a>
+                    <a href="#" class="btn btn-primary btn-animated flex-fill fw-bold">Add to Cart</a>
+                </div>
+            </div>
+
+            <div class="card p-4 shadow-lg border-0">
+                <h5 class="fw-bold mb-3">Purchase Info</h5>
+                <div class="info-line">
+                    <i class="bi bi-credit-card-fill text-success"></i>
+                    <strong>Payment Methods:</strong> <span class="highlight ms-2">Cash, Card</span>
+                </div>
+                <div class="info-line">
+                    <i class="bi bi-truck text-info"></i>
+                    <strong>Delivery:</strong> <span class="highlight ms-2">1-day safe delivery</span>
+                </div>
+                <div class="info-line">
+                    <i class="bi bi-shield-check text-primary"></i>
+                    <strong>Warranty:</strong> <span class="highlight ms-2">12 months</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Static Comments -->
+    <div class="mt-5">
+        <h4 class="mb-4">Latest Comments</h4>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="comment-card">
+                    <strong>John Doe</strong> <span class="comment-stars">★★★★★</span>
+                    <p class="text-muted mb-1"><strong>Pros:</strong> Excellent quality</p>
+                    <p class="text-muted mb-1"><strong>Cons:</strong> None</p>
+                    <p class="mb-0"><strong>Comment:</strong> Totally recommend this product!</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="comment-card">
+                    <strong>Jane Smith</strong> <span class="comment-stars">★★★★★</span>
+                    <p class="text-muted mb-1"><strong>Pros:</strong> Fast delivery</p>
+                    <p class="text-muted mb-1"><strong>Cons:</strong> Slightly pricey</p>
+                    <p class="mb-0"><strong>Comment:</strong> Worth every penny!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Description -->
+    <div class="description-box mt-5">
+        <h4 class="mb-3">Description</h4>
+        <p>{{ product.description }}</p>
+        {% if product.size %}
+        <p><strong>Size:</strong> {{ product.size }}</p>
+        {% endif %}
+        {% if product.component %}
+        <p><strong>Included Components:</strong> {{ product.component }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Related Products -->
+    <div class="mt-5">
+        <h4>Related Products</h4>
+        <div class="row">
+            {% for item in related_products %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card h-100 shadow-sm border-0 related-card">
+                    <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}">
+                    <div class="card-body text-center">
+                        <h6 class="card-title">{{ item.name }}</h6>
+                        <p class="text-primary fw-bold">${{ item.price }}</p>
+                        <a href="{% url 'products' item.slug %]" class="btn btn-sm btn-outline-primary btn-animated w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>No related products found.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.small-thumb').forEach(thumb => {
+        thumb.addEventListener('click', function() {
+            let mainImg = document.getElementById('mainImage');
+            mainImg.style.opacity = 0;
+            setTimeout(() => {
+                mainImg.src = this.src;
+                mainImg.style.opacity = 1;
+            }, 200);
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Order: {{ product.name }}</h2>
+<p>Price: ${{ product.price }}</p>
+
+<form method="POST" action="{% url 'submit_order' %}">
+    {% csrf_token %}
+    <input type="hidden" name="product_id" value="{{ product.id }}">
+    
+    <label>Set your phone number:</label>
+    <div>
+        <input type="text" value="+998" readonly style="width: 50px;">
+        <input type="text" name="phone_number" placeholder="912345678" required>
+    </div>
+
+    <button type="submit">Confirm Order</button>
+</form>
+{% endblock %}

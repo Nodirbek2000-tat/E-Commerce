@@ -1,0 +1,736 @@
+<!--&lt;!&ndash;{% extends "base.html" %}&ndash;&gt;-->
+<!--&lt;!&ndash;{% load static %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;{% block content %}&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="container mt-4">&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; Category title and comment count &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <div class="d-flex justify-content-between align-items-center mb-3">&ndash;&gt;-->
+<!--&lt;!&ndash;        <h2 class="text-capitalize">Headphones</h2>&ndash;&gt;-->
+<!--&lt;!&ndash;        <span class="text-muted">{{ headphone.count }} Comments</span>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; Products Grid &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <div class="row">&ndash;&gt;-->
+<!--&lt;!&ndash;        {% for heads in headphone %}&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="col-md-2 mb-4">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="card h-100 shadow-sm" style="border-radius: 10px;">&ndash;&gt;-->
+<!--&lt;!&ndash;                <img src="{{ heads.image.url }}" class="card-img-top" alt="{{ heads.name }}" style="height: 150px; object-fit: cover; border-top-left-radius: 10px; border-top-right-radius: 10px;">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="card-body text-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <h5 class="card-title" style="font-size: 16px;">{{ heads.name }}</h5>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <p class="mb-1" style="color: #2E86C1; font-weight: bold;">${{ heads.price }}</p>&ndash;&gt;-->
+<!--&lt;!&ndash;                    {% if heads.discount %}&ndash;&gt;-->
+<!--&lt;!&ndash;                        <p class="mb-0" style="color: #E74C3C;">Discount: ${{ heads.discount }}</p>&ndash;&gt;-->
+<!--&lt;!&ndash;                    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        {% endfor %}&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; Pagination &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;    <div class="d-flex justify-content-center mt-4">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <nav>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;            <ul class="pagination">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                {% if page_obj.has_previous %}&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                {% else %}&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                    <li class="page-item disabled"><span class="page-link">Previous</span></li>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                {% endif %}&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;                {% for num in page_obj.paginator.page_range %}&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                    {% if page_obj.number == num %}&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                    {% else %}&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                    {% endif %}&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                {% endfor %}&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;                {% if page_obj.has_next %}&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                {% else %}&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                    <li class="page-item disabled"><span class="page-link">Next</span></li>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                {% endif %}&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;            </ul>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        </nav>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;    </div>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;{% endblock %}&ndash;&gt;-->
+
+
+<!--bu uchinchisi-->
+<!--{% extends "base.html" %}-->
+<!--{% load static %}-->
+
+<!--{% block content %}-->
+<!--<div class="container mt-4">-->
+
+<!--    &lt;!&ndash; Category title and comment count &ndash;&gt;-->
+<!--    <div class="d-flex justify-content-between align-items-center mb-3">-->
+<!--        <h2 class="text-capitalize">Headphones</h2>-->
+<!--        <span class="text-muted">{{ headphone.count }} items</span>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Products Grid &ndash;&gt;-->
+<!--    <div class="row">-->
+<!--        {% for heads in headphone %}-->
+<!--        <div class="col-lg-2 col-md-3 col-sm-6 mb-4">-->
+<!--            <div class="product-card position-relative h-100 shadow-sm border-0">-->
+
+<!--                &lt;!&ndash; Image &ndash;&gt;-->
+<!--                <div class="image-holder position-relative overflow-hidden">-->
+<!--                    <img src="{{ heads.image.url }}" alt="{{ heads.name }}" class="img-fluid product-img">-->
+
+<!--                    &lt;!&ndash; Hover Add to Cart &ndash;&gt;-->
+<!--                    <div class="cart-concern position-absolute w-100 text-center">-->
+<!--                        <a href="#" class="btn btn-sm btn-pink fw-bold shadow">Add to Cart</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Card details &ndash;&gt;-->
+<!--                <div class="text-center p-3">-->
+<!--                    <h6 class="text-uppercase mb-2 product-title">{{ heads.name }}</h6>-->
+<!--                    <span class="item-price">${{ heads.price }}</span>-->
+<!--                    {% if heads.discount %}-->
+<!--                        <div class="text-danger small">Discount: ${{ heads.discount }}</div>-->
+<!--                    {% endif %}-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        {% endfor %}-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; CSS &ndash;&gt;-->
+<!--<style>-->
+<!--.product-card {-->
+<!--    border-radius: 12px;-->
+<!--    background: #fff;-->
+<!--    transition: transform 0.2s ease-in-out;-->
+<!--}-->
+<!--.product-card:hover {-->
+<!--    transform: translateY(-5px);-->
+<!--    box-shadow: 0 8px 25px rgba(0,0,0,0.1);-->
+<!--}-->
+
+<!--/* Product image styling */-->
+<!--.product-img {-->
+<!--    height: 220px; /* kattaroq rasm */-->
+<!--    width: 100%;-->
+<!--    object-fit: cover;-->
+<!--    transition: transform 0.3s ease;-->
+<!--}-->
+<!--.product-card:hover .product-img {-->
+<!--    transform: scale(1.05);-->
+<!--}-->
+
+<!--/* Hover Add to Cart */-->
+<!--.cart-concern {-->
+<!--    bottom: 15px; /* pastroqda bo'ladi */-->
+<!--    left: 0;-->
+<!--    opacity: 0;-->
+<!--    transition: opacity 0.3s ease;-->
+<!--}-->
+<!--.product-card:hover .cart-concern {-->
+<!--    opacity: 1;-->
+<!--}-->
+
+<!--/* Tugma pushti rang */-->
+<!--.btn-pink {-->
+<!--    background-color: #ff4f81;-->
+<!--    color: #fff;-->
+<!--    padding: 6px 14px;-->
+<!--    border-radius: 20px;-->
+<!--    font-size: 13px;-->
+<!--    transition: background-color 0.2s;-->
+<!--}-->
+<!--.btn-pink:hover {-->
+<!--    background-color: #e43d6d;-->
+<!--    color: #fff;-->
+<!--}-->
+
+<!--/* Title & price */-->
+<!--.product-title {-->
+<!--    font-size: 15px;-->
+<!--    font-weight: bold;-->
+<!--    min-height: 38px; /* ikki qatorda joylashishi uchun */-->
+<!--}-->
+<!--.item-price {-->
+<!--    color: #2E86C1;-->
+<!--    font-weight: bold;-->
+<!--    font-size: 15px;-->
+<!--}-->
+<!--</style>-->
+
+<!--{% endblock %}-->
+
+
+
+
+index html:
+<!--def home_view(request):-->
+<!--    latest_new = New.published.order_by('-id').first()-->
+<!--    latest_news = New.published.order_by('-id')[1:5]-->
+<!--    sport_news = New.published.filter(category__name="Sport")-->
+<!--    techno_news = New.published.filter(category__name="Texnalogiya")-->
+<!--    intertain_news = New.published.filter(category__name="Kongilxushlik")-->
+<!--    busines_news = New.published.filter(category__name="Bussines")-->
+<!--    popular_news = New.published.filter(is_trending=True)-->
+
+<!--    context = {-->
+<!--        "latest_new" : latest_new,-->
+<!--        "latest_news" : latest_news,-->
+<!--        "sport_news" : sport_news,-->
+<!--        "techno_news" : techno_news,-->
+<!--        "intertain_news" : intertain_news,-->
+<!--        "busines_news" : busines_news,-->
+<!--        "popular_news" : popular_news,-->
+
+<!--    }-->
+<!--    return render(request,'index.html',context)-->
+
+single page:
+
+<!--{% extends 'base.html' %}-->
+<!--{% load static %}-->
+
+<!--{% block content %}-->
+<!--<div class="container my-5">-->
+
+<!--    &lt;!&ndash; Product Title &ndash;&gt;-->
+<!--    <h2 class="fw-bold mb-1">{{ product.name }}</h2>-->
+
+<!--    &lt;!&ndash; Rating &ndash;&gt;-->
+<!--    <div class="d-flex align-items-center mb-4">-->
+<!--        <span class="text-warning fs-5 me-2">★★★★★</span>-->
+<!--        <span class="text-muted">({{ product.comments }} reviews)</span>-->
+<!--    </div>-->
+
+<!--    <div class="row g-4">-->
+<!--        &lt;!&ndash; Left: Images &ndash;&gt;-->
+<!--        <div class="col-lg-6">-->
+<!--            <div class="card p-3 shadow-sm">-->
+<!--                <div class="d-flex">-->
+<!--                    &lt;!&ndash; Thumbnails &ndash;&gt;-->
+<!--                    <div class="me-3">-->
+<!--                        {% for image in product.images %}-->
+<!--                            <img src="{{ image.url }}" class="img-thumbnail mb-2" style="width:70px; height:70px; object-fit:cover; cursor:pointer;">-->
+<!--                        {% endfor %}-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; Main Image &ndash;&gt;-->
+<!--                    <div class="flex-grow-1">-->
+<!--                        <img src="{{ product.image.url }}" class="img-fluid border rounded" alt="{{ product.name }}">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Right: Price & Info &ndash;&gt;-->
+<!--        <div class="col-lg-6">-->
+<!--            <div class="card p-4 shadow-sm mb-4">-->
+<!--                <h3 class="text-primary fw-bold mb-1">${{ product.price }}</h3>-->
+<!--                <p class="text-muted"><del>${{ product.old_price }}</del> <span class="badge bg-success">-{{ product.discount }}%</span></p>-->
+
+<!--                <hr>-->
+<!--                <p><strong>Brand:</strong> {{ product.name }}</p>-->
+<!--                <p><strong>Category:</strong> {{ product.category.name }}</p>-->
+<!--                <p><strong>Availability:</strong> {{ product.stock_count }} in stock</p>-->
+<!--                <p><strong>Sold:</strong> {{ product.order_count }} pcs</p>-->
+
+<!--                <div class="d-flex gap-2 mt-4">-->
+<!--                    <button class="btn btn-warning flex-fill">Buy Now</button>-->
+<!--                    <button class="btn btn-primary flex-fill">Add to Cart</button>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="card p-4 shadow-sm">-->
+<!--                <p class="mb-1"><strong>Payment Methods:</strong> Cash, Card</p>-->
+<!--                <p class="mb-1"><strong>Delivery:</strong> 1-day safe delivery</p>-->
+<!--                <p class="mb-0"><strong>Garranty:</strong> 12 months</p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Reviews &ndash;&gt;-->
+<!--    <div class="card p-4 shadow-sm mt-5">-->
+<!--        <h4 class="mb-3">Latest Coments</h4>-->
+<!--        <div class="row">-->
+<!--            {% for review in product.latest_reviews %}-->
+<!--            <div class="col-md-6">-->
+<!--                <div class="border p-3 rounded mb-3">-->
+<!--                    <strong>{{ review.user }}</strong> <span class="text-warning">★★★★★</span>-->
+<!--                    <p class="mb-0">{{ review.comment }}</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            {% endfor %}-->
+<!--        </div>-->
+<!--        <a href="#" class="btn btn-outline-primary mt-2">Read All Comments</a>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Description &ndash;&gt;-->
+<!--    <div class="card p-4 shadow-sm mt-5">-->
+<!--        <h4>Description</h4>-->
+<!--        <p>{{ product.description }}</p>-->
+
+<!--        {% if product.size %}-->
+<!--        <p><strong>Size:</strong> {{ product.size }}</p>-->
+<!--        {% endif %}-->
+
+<!--        {% if product.componnent %}-->
+<!--        <p><strong>Included Components:</strong> {{ product.componnent }}</p>-->
+<!--        {% endif %}-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Related Products &ndash;&gt;-->
+<!--    <div class="mt-5">-->
+<!--        <h4>Related Products</h4>-->
+<!--        <div class="row">-->
+<!--            {% for item in related_products %}-->
+<!--            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">-->
+<!--                <div class="card h-100 shadow-sm border-0">-->
+<!--                    <img src="{{ item.main_image.url }}" class="card-img-top" alt="{{ item.name }}">-->
+<!--                    <div class="card-body">-->
+<!--                        <h6 class="card-title">{{ item.name }}</h6>-->
+<!--                        <p class="text-primary fw-bold">${{ item.price }}</p>-->
+<!--                        <a href="{% url 'product_detail' item.id %}" class="btn btn-sm btn-outline-primary w-100">View Details</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            {% endfor %}-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--</div>-->
+<!--{% endblock %}-->
+
+Latest_ single page 00:34
+
+
+<!--{% extends 'base.html' %}-->
+<!--{% load static %}-->
+
+<!--{% block content %}-->
+<!--<div class="container my-5">-->
+
+<!--    &lt;!&ndash; Product Title &ndash;&gt;-->
+<!--    <h2 class="fw-bold mb-2">{{ product.name }}</h2>-->
+
+<!--    &lt;!&ndash; Rating &ndash;&gt;-->
+<!--    <div class="d-flex align-items-center mb-4">-->
+<!--        <span class="text-warning fs-5 me-2">★★★★★</span>-->
+<!--        <span class="text-muted">({{ latest_reviews|length }} reviews)</span>-->
+<!--    </div>-->
+
+<!--    <div class="row g-4">-->
+<!--        &lt;!&ndash; Left: Images &ndash;&gt;-->
+<!--        <div class="col-lg-6">-->
+<!--            <div class="card p-3 shadow-sm">-->
+<!--                <div class="d-flex">-->
+<!--                    &lt;!&ndash; Thumbnails &ndash;&gt;-->
+<!--                    <div class="me-3" style="max-height: 400px; overflow-y: auto;">-->
+<!--                        {% for images in product.images.all %}-->
+<!--                            <img src="{{ images.image.url }}"-->
+<!--                                 class="img-thumbnail mb-2 small-thumb"-->
+<!--                                 style="width:70px; height:70px; object-fit:cover; cursor:pointer;">-->
+<!--                        {% endfor %}-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; Main Image &ndash;&gt;-->
+<!--                    <div class="flex-grow-1 text-center">-->
+<!--                        <img id="mainImage" src="{{ product.main_image.url }}" class="img-fluid border rounded" alt="{{ product.name }}">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Right: Price & Info &ndash;&gt;-->
+<!--        <div class="col-lg-6">-->
+<!--            <div class="card p-4 shadow-sm mb-4">-->
+<!--                <h3 class="text-primary fw-bold mb-1">${{ product.price }}</h3>-->
+<!--                {% if product.old_price %}-->
+<!--                <p class="text-muted">-->
+<!--                    <del>${{ product.old_price }}</del>-->
+<!--                    {% if product.discount %}-->
+<!--                    <span class="badge bg-success">-{{ product.discount }}%</span>-->
+<!--                    {% endif %}-->
+<!--                </p>-->
+<!--                {% endif %}-->
+
+<!--                <hr>-->
+<!--                <p><strong>Category:</strong> {{ product.category.name }}</p>-->
+<!--                <p><strong>Availability:</strong> {{ product.stock_count }} in stock</p>-->
+<!--                <p><strong>Sold:</strong> {{ product.order_count }} in this week</p>-->
+
+<!--                <div class="d-flex gap-2 mt-4">-->
+<!--                    <a href="#" class="btn btn-warning flex-fill">Buy Now</a>-->
+<!--                    <a href="#" class="btn btn-primary flex-fill">Add to Cart</a>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="card p-4 shadow-sm">-->
+<!--                <p class="mb-1"><strong>Payment Methods:</strong> Cash, Card</p>-->
+<!--                <p class="mb-1"><strong>Delivery:</strong> 1-day safe delivery</p>-->
+<!--                <p class="mb-0"><strong>Warranty:</strong> 12 months</p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Reviews &ndash;&gt;-->
+<!--    <div class="card p-4 shadow-sm mt-5">-->
+<!--        <h4 class="mb-3">Latest Comments</h4>-->
+<!--        <div class="row">-->
+<!--            {% for review in latest_reviews %}-->
+<!--            <div class="col-md-6">-->
+<!--                <div class="border p-3 rounded mb-3">-->
+<!--                    <strong>{{ review.user.username }}</strong>-->
+<!--                    <span class="text-warning">★★★★★</span>-->
+<!--                    <p class="mb-0">{{ review.comment }}</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            {% empty %}-->
+<!--            <p>No comments yet.</p>-->
+<!--            {% endfor %}-->
+<!--        </div>-->
+<!--        <a href="#" class="btn btn-outline-primary mt-2">Read All Comments</a>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Description &ndash;&gt;-->
+<!--    <div class="card p-4 shadow-sm mt-5">-->
+<!--        <h4>Description</h4>-->
+<!--        <p>{{ product.description }}</p>-->
+
+<!--        {% if product.size %}-->
+<!--        <p><strong>Size:</strong> {{ product.size }}</p>-->
+<!--        {% endif %}-->
+
+<!--        {% if product.component %}-->
+<!--        <p><strong>Included Components:</strong> {{ product.component }}</p>-->
+<!--        {% endif %}-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Related Products &ndash;&gt;-->
+<!--    <div class="mt-5">-->
+<!--        <h4>Related Products</h4>-->
+<!--        <div class="row">-->
+<!--            {% for item in related_products %}-->
+<!--            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">-->
+<!--                <div class="card h-100 shadow-sm border-0">-->
+<!--                    <img src="{{ item.main_image.url }}" class="card-img-top" alt="{{ item.name }}">-->
+<!--                    <div class="card-body">-->
+<!--                        <h6 class="card-title">{{ item.name }}</h6>-->
+<!--                        <p class="text-primary fw-bold">${{ item.price }}</p>-->
+<!--                        <a href="#" class="btn btn-sm btn-outline-primary w-100">View Details</a>-->
+
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            {% empty %}-->
+<!--            <p>No related products found.</p>-->
+<!--            {% endfor %}-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--</div>-->
+
+<!--&lt;!&ndash; JavaScript for Thumbnail Click &ndash;&gt;-->
+<!--<script>-->
+<!--    document.querySelectorAll('.small-thumb').forEach(thumb => {-->
+<!--        thumb.addEventListener('click', function() {-->
+<!--            document.getElementById('mainImage').src = this.src;-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+<!--{% endblock %}-->
+
+buy now html 16:43
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Buy Now</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--            margin: 0;-->
+<!--        }-->
+<!--        /* Dark overlay for background */-->
+<!--        .overlay {-->
+<!--            position: fixed;-->
+<!--            top: 0;-->
+<!--            left: 0;-->
+<!--            width: 100%;-->
+<!--            height: 100%;-->
+<!--            background: rgba(0,0,0,0.5);-->
+<!--            backdrop-filter: blur(2px);-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            align-items: center;-->
+<!--            z-index: 999;-->
+<!--        }-->
+<!--        .modal {-->
+<!--            background: white;-->
+<!--            width: 1000px;-->
+<!--            display: flex;-->
+<!--            border-radius: 12px;-->
+<!--            overflow: hidden;-->
+<!--            position: relative;-->
+<!--            animation: fadeIn 0.3s ease-in-out;-->
+<!--            box-shadow: 0 5px 20px rgba(0,0,0,0.3);-->
+<!--        }-->
+<!--        @keyframes fadeIn {-->
+<!--            from {opacity: 0; transform: scale(0.95);}-->
+<!--            to {opacity: 1; transform: scale(1);}-->
+<!--        }-->
+<!--        .close-btn {-->
+<!--            position: absolute;-->
+<!--            top: 12px;-->
+<!--            right: 18px;-->
+<!--            font-size: 24px;-->
+<!--            cursor: pointer;-->
+<!--            color: #333;-->
+<!--        }-->
+<!--        .left {-->
+<!--            flex: 1;-->
+<!--            background: #f9f9f9;-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            align-items: center;-->
+<!--            padding: 20px;-->
+<!--        }-->
+<!--        .left img {-->
+<!--            max-width: 95%;-->
+<!--            border-radius: 8px;-->
+<!--        }-->
+<!--        .right {-->
+<!--            flex: 1.5;-->
+<!--            padding: 25px;-->
+<!--            display: flex;-->
+<!--            flex-direction: column;-->
+<!--            justify-content: space-between;-->
+<!--        }-->
+<!--        h2 {-->
+<!--            margin: 0;-->
+<!--            font-size: 26px;-->
+<!--            color: #222;-->
+<!--        }-->
+<!--        .sizes button {-->
+<!--            margin: 5px;-->
+<!--            padding: 8px 14px;-->
+<!--            border: 1px solid #ccc;-->
+<!--            background: white;-->
+<!--            cursor: pointer;-->
+<!--            border-radius: 6px;-->
+<!--            font-size: 14px;-->
+<!--            transition: all 0.2s ease-in-out;-->
+<!--        }-->
+<!--        .sizes button.active {-->
+<!--            border-color: #6a0dad;-->
+<!--            color: white;-->
+<!--            background: #6a0dad;-->
+<!--            transform: scale(1.1);-->
+<!--        }-->
+<!--        .quantity {-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--            margin-top: 12px;-->
+<!--            gap: 10px;-->
+<!--        }-->
+<!--        .quantity button {-->
+<!--            background: #eee;-->
+<!--            border: none;-->
+<!--            padding: 6px 14px;-->
+<!--            font-size: 18px;-->
+<!--            cursor: pointer;-->
+<!--            border-radius: 4px;-->
+<!--        }-->
+<!--        .quantity span {-->
+<!--            color: green;-->
+<!--            font-weight: bold;-->
+<!--        }-->
+<!--        .stock-message {-->
+<!--            color: green;-->
+<!--            font-size: 14px;-->
+<!--        }-->
+<!--        .price {-->
+<!--            margin-top: 12px;-->
+<!--        }-->
+<!--        .price .old {-->
+<!--            text-decoration: line-through;-->
+<!--            color: #888;-->
+<!--            margin-right: 10px;-->
+<!--            font-size: 16px;-->
+<!--        }-->
+<!--        .price .new {-->
+<!--            font-size: 22px;-->
+<!--            font-weight: bold;-->
+<!--            color: #6a0dad;-->
+<!--        }-->
+<!--        .add-cart {-->
+<!--            background: #6a0dad;-->
+<!--            color: white;-->
+<!--            padding: 14px;-->
+<!--            font-size: 18px;-->
+<!--            border-radius: 8px;-->
+<!--            cursor: pointer;-->
+<!--            border: none;-->
+<!--            margin-top: 15px;-->
+<!--            width: 100%;-->
+<!--        }-->
+<!--        .delivery-info {-->
+<!--            margin-top: 15px;-->
+<!--            font-size: 15px;-->
+<!--            color: #444;-->
+<!--            background: #f4f4f4;-->
+<!--            padding: 10px;-->
+<!--            border-radius: 6px;-->
+<!--        }-->
+<!--        .payment-methods {-->
+<!--            display: flex;-->
+<!--            gap: 15px;-->
+<!--            margin-top: 15px;-->
+<!--        }-->
+<!--        .payment-methods div {-->
+<!--            flex: 1;-->
+<!--            text-align: center;-->
+<!--            padding: 12px;-->
+<!--            border: 1px solid #ccc;-->
+<!--            border-radius: 6px;-->
+<!--            font-weight: bold;-->
+<!--            background: #fafafa;-->
+<!--            cursor: pointer;-->
+<!--            font-size: 16px;-->
+<!--            transition: all 0.2s ease-in-out;-->
+<!--        }-->
+<!--        .payment-methods div.active {-->
+<!--            border-color: #6a0dad;-->
+<!--            background: #6a0dad;-->
+<!--            color: white;-->
+<!--            transform: scale(1.1);-->
+<!--        }-->
+<!--        .installment-info {-->
+<!--            margin-top: 15px;-->
+<!--            font-size: 15px;-->
+<!--            color: #333;-->
+<!--            background: #fff3cd;-->
+<!--            padding: 10px;-->
+<!--            border-radius: 6px;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="overlay">-->
+<!--    <div class="modal">-->
+<!--        <span class="close-btn" onclick="closeModal()">&times;</span>-->
+
+<!--        <div class="left">-->
+<!--            <img src="https://via.placeholder.com/400" alt="Product Image">-->
+<!--        </div>-->
+
+<!--        <div class="right">-->
+<!--            <div>-->
+<!--                <h2>Kukmara 'Marble' Frying Pan</h2>-->
+<!--                <p>Select Size:</p>-->
+<!--                <div class="sizes" id="sizes-container">-->
+<!--                    &lt;!&ndash; Sizes will load dynamically &ndash;&gt;-->
+<!--                </div>-->
+
+<!--                <div class="quantity">-->
+<!--                    <button onclick="decreaseQty()">-</button>-->
+<!--                    <input type="text" id="qty" value="1" readonly style="width:45px; text-align:center; border:none; font-size:16px;">-->
+<!--                    <button onclick="increaseQty()">+</button>-->
+<!--                    <span>Stock: <span id="stock">5</span></span>-->
+<!--                </div>-->
+<!--                <div id="stock-message" class="stock-message"></div>-->
+
+<!--                <div class="price">-->
+<!--                    <span class="old">$50.00</span>-->
+<!--                    <span class="new">$39.00</span>-->
+<!--                </div>-->
+
+<!--                <button class="add-cart">Add to Cart</button>-->
+
+<!--                <div class="delivery-info">-->
+<!--                    🚚 Delivery in 1 day • Guaranteed quality-->
+<!--                </div>-->
+
+<!--                <div class="payment-methods">-->
+<!--                    <div onclick="selectPayment(this)">💵 Cash</div>-->
+<!--                    <div onclick="selectPayment(this)">💳 Card</div>-->
+<!--                </div>-->
+
+<!--                <div class="installment-info">-->
+<!--                    💡 Pay in installments from $10/month — Flexible payment options available.-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    let stock = 5;-->
+<!--    let qtyInput = document.getElementById('qty');-->
+<!--    let stockMessage = document.getElementById('stock-message');-->
+
+<!--    // Dynamic sizes (simulate backend data)-->
+<!--    let availableSizes = ["220 mm", "240 mm", "260 mm"]; // Try [] for no size-->
+
+<!--    function loadSizes() {-->
+<!--        let container = document.getElementById('sizes-container');-->
+<!--        container.innerHTML = "";-->
+<!--        if (availableSizes.length > 0) {-->
+<!--            availableSizes.forEach((size, index) => {-->
+<!--                let btn = document.createElement('button');-->
+<!--                btn.textContent = size;-->
+<!--                if (index === 0) btn.classList.add('active');-->
+<!--                btn.onclick = function() {-->
+<!--                    document.querySelectorAll('.sizes button').forEach(b => b.classList.remove('active'));-->
+<!--                    btn.classList.add('active');-->
+<!--                };-->
+<!--                container.appendChild(btn);-->
+<!--            });-->
+<!--        } else {-->
+<!--            container.innerHTML = "<p>No size</p>";-->
+<!--        }-->
+<!--    }-->
+
+<!--    function increaseQty() {-->
+<!--        let current = parseInt(qtyInput.value);-->
+<!--        if (current < stock) {-->
+<!--            qtyInput.value = current + 1;-->
+<!--            stockMessage.textContent = "";-->
+<!--        } else {-->
+<!--            stockMessage.textContent = `✅ Sorry, we have only ${stock} in stock.`;-->
+<!--        }-->
+<!--    }-->
+
+<!--    function decreaseQty() {-->
+<!--        let current = parseInt(qtyInput.value);-->
+<!--        if (current > 1) {-->
+<!--            qtyInput.value = current - 1;-->
+<!--            stockMessage.textContent = "";-->
+<!--        }-->
+<!--    }-->
+
+<!--    function selectPayment(el) {-->
+<!--        document.querySelectorAll('.payment-methods div').forEach(div => div.classList.remove('active'));-->
+<!--        el.classList.add('active');-->
+<!--    }-->
+
+<!--    function closeModal() {-->
+<!--        document.querySelector(".overlay").style.display = "none";-->
+<!--    }-->
+
+<!--    // Load sizes on page load-->
+<!--    loadSizes();-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+
+
